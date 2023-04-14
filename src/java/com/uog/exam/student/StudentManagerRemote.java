@@ -22,13 +22,13 @@ public interface StudentManagerRemote {
 
     public StudentEntity getStudentByName(String stdName) throws StudentNotFoundException, DatabaseInconsistentStateException;
 
-    public StudentEntity updateStudentName(int stdID, String newStdName) throws StudentNotFoundException, WrongParameterException;
+    public StudentEntity updateStudent(int stdID, String newStdName,String stdRollNo, String stdEmail, String stdContact,int semester, String section) throws StudentNotFoundException, WrongParameterException;
     
     public StudentEntity getStudentByRollNo(String stdRollNo) throws StudentNotFoundException, DatabaseInconsistentStateException;
     
     public void deleteStudentById(int stdId) throws StudentNotFoundException;
 
     public String textMessage(String str);
-
+    
     public List<StudentEntity> getAllStudents() throws  StudentNotFoundException;
 }

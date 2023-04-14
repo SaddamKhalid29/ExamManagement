@@ -6,6 +6,8 @@ package com.uog.exam.student;
 
 import com.uog.exam.entity.StudentEntity;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
@@ -18,17 +20,15 @@ import javax.persistence.Query;
  * @author martin
  */
 @Stateless
-public class StudentManager implements StudentManagerRemote{
-    
+public class StudentManager implements StudentManagerRemote {
+
     @PersistenceContext(unitName = "ExamPU")
     //Persistance Interface to implement methods
     EntityManager entityManager;
-  
 
     //Method to add new Student
-    
     @Override
-    public StudentEntity addNewStudent(String studentRollNo, String studentName, int studentSemester, 
+    public StudentEntity addNewStudent(String studentRollNo, String studentName, int studentSemester,
             String studentSection, String studentEmail, String studentContact) throws WrongParameterException {
         //Creating the object of StudentEntity class
         StudentEntity studentEntity = new StudentEntity();
@@ -39,7 +39,7 @@ public class StudentManager implements StudentManagerRemote{
         if (studentName == null || studentName.isEmpty()) {
             throw new WrongParameterException("The Student_Name of student is invalid.");
         }
-        if (studentSemester <1 || studentSemester>8) {
+        if (studentSemester < 1 || studentSemester > 8) {
             throw new WrongParameterException("Semester value can be between 1 and 8");
         }
         if (studentSection == null || studentSection.isEmpty()) {
@@ -61,8 +61,8 @@ public class StudentManager implements StudentManagerRemote{
         studentEntity.setStudentContactNo(studentContact);
 
         //Persist method is intended to add new entity instance to the persistence context.
-       entityManager.persist(studentEntity);
-        
+        entityManager.persist(studentEntity);
+
         return studentEntity;
     }
 
@@ -92,7 +92,7 @@ public class StudentManager implements StudentManagerRemote{
         } catch (NoResultException ne) {
             throw new StudentNotFoundException("Student with this Student_Name is not found : " + stdName);
         } catch (NonUniqueResultException nue) {
-            throw new StudentNotFoundException("Multiple records found for the Student_Name : " + stdName + " . Please checl DB for consistency.");
+            throw new StudentNotFoundException("Multiple records found for the Student_Name : " + stdName + " . Please check DB for consistency.");
 
         }
         return studentEntity;
@@ -100,24 +100,43 @@ public class StudentManager implements StudentManagerRemote{
 
     //Method to update student Student_Name
     @Override
-    public StudentEntity updateStudentName(int stdID, String newStdName) throws StudentNotFoundException, WrongParameterException {
+    public StudentEntity updateStudent(int stdID, String newStdName, String stdRollNo, String stdEmail, String stdContact, int semester, String section) throws StudentNotFoundException, WrongParameterException {
 
+        if (stdRollNo == null || stdRollNo.isEmpty()) {
+            throw new WrongParameterException("This rollno of student can be add");
+        }
         if (newStdName == null || newStdName.isEmpty()) {
-            throw new WrongParameterException("Student Student_Name can't be empty or null.");
+            throw new WrongParameterException("The Student_Name of student is invalid.");
+        }
+        if (semester < 1 || semester > 8) {
+            throw new WrongParameterException("Semester value can be between 1 and 8");
+        }
+        if (section == null || section.isEmpty()) {
+            throw new WrongParameterException("The Student_Section of student is invalid.");
+        }
+        if (stdEmail == null || stdEmail.isEmpty()) {
+            throw new WrongParameterException("The Student_Email of student is invalid.");
+        }
+        if (stdContact == null || stdContact.isEmpty()) {
+            throw new WrongParameterException("The Student_Contact of student is invalid.");
         }
         StudentEntity studentEntity = getStudentId(stdID);
         studentEntity.setStudentName(newStdName);
+        studentEntity.setStudentRollNo(stdRollNo);
+        studentEntity.setStudentEmail(stdEmail);
+        studentEntity.setStudentContactNo(stdContact);
+        studentEntity.setStudentSemester(semester);
+        studentEntity.setStudentSection(section);
         entityManager.persist(studentEntity);
-
         return studentEntity;
     }
 
     @Override
     public StudentEntity getStudentByRollNo(String rollNo) throws StudentNotFoundException, DatabaseInconsistentStateException {
-        
+
         Query qry = entityManager.createNamedQuery("StudentEntity.findByStudentRollNo");
-        qry.setParameter("studentRollNo",rollNo);
-       
+        qry.setParameter("studentRollNo", rollNo);
+
         StudentEntity studentEntity = null;
         try {
             studentEntity = (StudentEntity) qry.getSingleResult();
@@ -128,31 +147,31 @@ public class StudentManager implements StudentManagerRemote{
             throw new StudentNotFoundException("Multiple records found for the Student with Roll_No : " + rollNo + " . Please checl DB for consistency.");
 
         }
-        
-       return studentEntity;
+
+        return studentEntity;
     }
-    
+
     @Override
     public void deleteStudentById(int stdId) throws StudentNotFoundException {
         StudentEntity studentEntity;
         studentEntity = getStudentId(stdId);
         entityManager.remove(studentEntity);
-        System.out.println("Student with the id : "+stdId+ " is removed");
+        System.out.println("Student with the id : " + stdId + " is removed");
     }
-    
+
     @Override
     public String textMessage(String str) {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
     @Override
-    public List<StudentEntity> getAllStudents()  throws StudentNotFoundException{
-        Query qry=entityManager.createNamedQuery("StudentEntity.findAll");
-        List<StudentEntity> allStudents=qry.getResultList();
-        if(allStudents==null|| allStudents.isEmpty()){
+    public List<StudentEntity> getAllStudents() throws StudentNotFoundException {
+        Query qry = entityManager.createNamedQuery("StudentEntity.findAll");
+        List<StudentEntity> allStudents = qry.getResultList();
+        if (allStudents == null || allStudents.isEmpty()) {
             throw new StudentNotFoundException("No student found in database");
         }
-        return qry.getResultList();
+        return allStudents;
     }
- 
+
 }
