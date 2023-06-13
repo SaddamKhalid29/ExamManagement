@@ -7,7 +7,6 @@ package com.uog.exam.entity;
 import java.io.Serializable;
 import java.util.Collection;
 import javax.persistence.Basic;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -57,10 +56,6 @@ public class CourseEntity implements Serializable {
     @NotNull
     @Column(name = "Course_Credit_hrs")
     private int courseCredithrs;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "seatingPlanCourseID")
-    private Collection<SeatingPlanEntity> seatingPlanEntityCollection;
-    @OneToMany(mappedBy = "dateSheetCourseID")
-    private Collection<DateSheetEntity> dateSheetEntityCollection;
     @OneToMany(mappedBy = "courseRegCourseID")
     private Collection<CourseRegistrationEntity> courseRegistrationEntityCollection;
 
@@ -111,24 +106,6 @@ public class CourseEntity implements Serializable {
     }
 
     @XmlTransient
-    public Collection<SeatingPlanEntity> getSeatingPlanEntityCollection() {
-        return seatingPlanEntityCollection;
-    }
-
-    public void setSeatingPlanEntityCollection(Collection<SeatingPlanEntity> seatingPlanEntityCollection) {
-        this.seatingPlanEntityCollection = seatingPlanEntityCollection;
-    }
-
-    @XmlTransient
-    public Collection<DateSheetEntity> getDateSheetEntityCollection() {
-        return dateSheetEntityCollection;
-    }
-
-    public void setDateSheetEntityCollection(Collection<DateSheetEntity> dateSheetEntityCollection) {
-        this.dateSheetEntityCollection = dateSheetEntityCollection;
-    }
-
-    @XmlTransient
     public Collection<CourseRegistrationEntity> getCourseRegistrationEntityCollection() {
         return courseRegistrationEntityCollection;
     }
@@ -159,7 +136,7 @@ public class CourseEntity implements Serializable {
 
     @Override
     public String toString() {
-        return "com.uog.exam.course.CourseEntity[ courseID=" + courseID + " ]";
+        return "com.uog.exam.entity.CourseEntity[ courseID=" + courseID + " ]";
     }
     
 }

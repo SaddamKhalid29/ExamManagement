@@ -7,7 +7,6 @@ package com.uog.exam.entity;
 import java.io.Serializable;
 import java.util.Collection;
 import javax.persistence.Basic;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -16,7 +15,6 @@ import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -76,12 +74,8 @@ public class StudentEntity implements Serializable {
     @Size(min = 1, max = 45)
     @Column(name = "Student_Contact_No")
     private String studentContactNo;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "seatingPlanStudentID")
-    private Collection<SeatingPlanEntity> seatingPlanEntityCollection;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "studentSeatingStudentID")
-    private Collection<StudentSeatingEntity> studentSeatingEntityCollection;
-    @OneToOne(cascade = CascadeType.ALL, mappedBy = "studentEntity")
-    private CourseRegistrationEntity courseRegistrationEntity;
+    @OneToMany(mappedBy = "courseRegStudentID")
+    private Collection<CourseRegistrationEntity> courseRegistrationEntityCollection;
 
     public StudentEntity() {
     }
@@ -157,29 +151,12 @@ public class StudentEntity implements Serializable {
     }
 
     @XmlTransient
-    public Collection<SeatingPlanEntity> getSeatingPlanEntityCollection() {
-        return seatingPlanEntityCollection;
+    public Collection<CourseRegistrationEntity> getCourseRegistrationEntityCollection() {
+        return courseRegistrationEntityCollection;
     }
 
-    public void setSeatingPlanEntityCollection(Collection<SeatingPlanEntity> seatingPlanEntityCollection) {
-        this.seatingPlanEntityCollection = seatingPlanEntityCollection;
-    }
-
-    @XmlTransient
-    public Collection<StudentSeatingEntity> getStudentSeatingEntityCollection() {
-        return studentSeatingEntityCollection;
-    }
-
-    public void setStudentSeatingEntityCollection(Collection<StudentSeatingEntity> studentSeatingEntityCollection) {
-        this.studentSeatingEntityCollection = studentSeatingEntityCollection;
-    }
-
-    public CourseRegistrationEntity getCourseRegistrationEntity() {
-        return courseRegistrationEntity;
-    }
-
-    public void setCourseRegistrationEntity(CourseRegistrationEntity courseRegistrationEntity) {
-        this.courseRegistrationEntity = courseRegistrationEntity;
+    public void setCourseRegistrationEntityCollection(Collection<CourseRegistrationEntity> courseRegistrationEntityCollection) {
+        this.courseRegistrationEntityCollection = courseRegistrationEntityCollection;
     }
 
     @Override
@@ -204,7 +181,7 @@ public class StudentEntity implements Serializable {
 
     @Override
     public String toString() {
-        return "com.uog.exam.course.StudentEntity[ studentID=" + studentID + " ]";
+        return "com.uog.exam.entity.StudentEntity[ studentID=" + studentID + " ]";
     }
     
 }

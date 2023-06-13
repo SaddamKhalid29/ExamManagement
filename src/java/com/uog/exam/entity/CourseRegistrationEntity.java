@@ -8,14 +8,14 @@ import java.io.Serializable;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -28,39 +28,39 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "CourseRegistrationEntity.findAll", query = "SELECT c FROM CourseRegistrationEntity c"),
-    @NamedQuery(name = "CourseRegistrationEntity.findByCourseRegStudentID", query = "SELECT c FROM CourseRegistrationEntity c WHERE c.courseRegStudentID = :courseRegStudentID"),
+    @NamedQuery(name = "CourseRegistrationEntity.findByCourseRegistrationID", query = "SELECT c FROM CourseRegistrationEntity c WHERE c.courseRegistrationID = :courseRegistrationID"),
     @NamedQuery(name = "CourseRegistrationEntity.findByCourseRegYear", query = "SELECT c FROM CourseRegistrationEntity c WHERE c.courseRegYear = :courseRegYear")})
 public class CourseRegistrationEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    @NotNull
-    @Column(name = "CourseReg_Student_ID")
-    private Integer courseRegStudentID;
-    @Size(max = 45)
+    @Column(name = "CourseRegistration_ID")
+    private Integer courseRegistrationID;
+    @Size(max = 255)
     @Column(name = "CourseReg_Year")
     private String courseRegYear;
     @JoinColumn(name = "CourseReg_Course_ID", referencedColumnName = "Course_ID")
     @ManyToOne
     private CourseEntity courseRegCourseID;
-    @JoinColumn(name = "CourseReg_Student_ID", referencedColumnName = "Student_ID", insertable = false, updatable = false)
-    @OneToOne(optional = false)
-    private StudentEntity studentEntity;
+    @JoinColumn(name = "CourseReg_Student_ID", referencedColumnName = "Student_ID")
+    @ManyToOne
+    private StudentEntity courseRegStudentID;
 
     public CourseRegistrationEntity() {
     }
 
-    public CourseRegistrationEntity(Integer courseRegStudentID) {
-        this.courseRegStudentID = courseRegStudentID;
+    public CourseRegistrationEntity(Integer courseRegistrationID) {
+        this.courseRegistrationID = courseRegistrationID;
     }
 
-    public Integer getCourseRegStudentID() {
-        return courseRegStudentID;
+    public Integer getCourseRegistrationID() {
+        return courseRegistrationID;
     }
 
-    public void setCourseRegStudentID(Integer courseRegStudentID) {
-        this.courseRegStudentID = courseRegStudentID;
+    public void setCourseRegistrationID(Integer courseRegistrationID) {
+        this.courseRegistrationID = courseRegistrationID;
     }
 
     public String getCourseRegYear() {
@@ -79,18 +79,18 @@ public class CourseRegistrationEntity implements Serializable {
         this.courseRegCourseID = courseRegCourseID;
     }
 
-    public StudentEntity getStudentEntity() {
-        return studentEntity;
+    public StudentEntity getCourseRegStudentID() {
+        return courseRegStudentID;
     }
 
-    public void setStudentEntity(StudentEntity studentEntity) {
-        this.studentEntity = studentEntity;
+    public void setCourseRegStudentID(StudentEntity courseRegStudentID) {
+        this.courseRegStudentID = courseRegStudentID;
     }
 
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (courseRegStudentID != null ? courseRegStudentID.hashCode() : 0);
+        hash += (courseRegistrationID != null ? courseRegistrationID.hashCode() : 0);
         return hash;
     }
 
@@ -101,7 +101,7 @@ public class CourseRegistrationEntity implements Serializable {
             return false;
         }
         CourseRegistrationEntity other = (CourseRegistrationEntity) object;
-        if ((this.courseRegStudentID == null && other.courseRegStudentID != null) || (this.courseRegStudentID != null && !this.courseRegStudentID.equals(other.courseRegStudentID))) {
+        if ((this.courseRegistrationID == null && other.courseRegistrationID != null) || (this.courseRegistrationID != null && !this.courseRegistrationID.equals(other.courseRegistrationID))) {
             return false;
         }
         return true;
@@ -109,7 +109,7 @@ public class CourseRegistrationEntity implements Serializable {
 
     @Override
     public String toString() {
-        return "com.uog.exam.course.CourseRegistrationEntity[ courseRegStudentID=" + courseRegStudentID + " ]";
+        return "com.uog.exam.entity.CourseRegistrationEntity[ courseRegistrationID=" + courseRegistrationID + " ]";
     }
     
 }

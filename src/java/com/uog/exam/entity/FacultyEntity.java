@@ -39,6 +39,11 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "FacultyEntity.findByFacultyVisitingStatus", query = "SELECT f FROM FacultyEntity f WHERE f.facultyVisitingStatus = :facultyVisitingStatus")})
 public class FacultyEntity implements Serializable {
 
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "Faculty_Visiting_Status")
+    private boolean facultyVisitingStatus;
+
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -65,10 +70,6 @@ public class FacultyEntity implements Serializable {
     @Size(min = 1, max = 45)
     @Column(name = "Faculty_Designation")
     private String facultyDesignation;
-    @Basic(optional = false)
-    @NotNull
-    @Column(name = "Faculty_Visiting_Status")
-    private boolean facultyVisitingStatus;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "dutyRoasterFacultyID")
     private Collection<DutyRoasterEntity> dutyRoasterEntityCollection;
 
@@ -169,5 +170,6 @@ public class FacultyEntity implements Serializable {
     public String toString() {
         return "com.uog.exam.course.FacultyEntity[ facultyID=" + facultyID + " ]";
     }
+
     
 }
