@@ -134,12 +134,16 @@ public class StudentManager implements StudentManagerRemote {
     @Override
     public StudentEntity getStudentByRollNo(String rollNo) throws StudentNotFoundException, DatabaseInconsistentStateException {
 
+        System.out.println("Welcome to getStudentByRollNo Method...");
         Query qry = entityManager.createNamedQuery("StudentEntity.findByStudentRollNo");
         qry.setParameter("studentRollNo", rollNo);
 
         StudentEntity studentEntity = null;
         try {
             studentEntity = (StudentEntity) qry.getSingleResult();
+            System.out.println("Roll No : "+ studentEntity.getStudentRollNo());
+            System.out.println("Name : "+ studentEntity.getStudentName());
+            System.out.println("Section : "+studentEntity.getStudentSection());
 
         } catch (NoResultException ne) {
             throw new StudentNotFoundException("Student with this Student_Roll_No is not found : " + rollNo);
@@ -148,6 +152,7 @@ public class StudentManager implements StudentManagerRemote {
 
         }
 
+        System.out.println("Student Entity : "+studentEntity.toString());
         return studentEntity;
     }
 

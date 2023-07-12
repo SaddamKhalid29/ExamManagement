@@ -169,7 +169,6 @@ public class FacultyEntity implements Serializable {
     @Override
     public String toString() {
         return "com.uog.exam.course.FacultyEntity[ facultyID=" + facultyID + " ]";
-    }
+    }    
 
-    
 }

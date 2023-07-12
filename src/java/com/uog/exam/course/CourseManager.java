@@ -83,24 +83,30 @@ public class CourseManager implements CourseManagerRemote {
         CourseEntity courseEntity;
         courseEntity = getCourseById(courseId);
         entityManager.remove(courseEntity);
-        System.out.println("Course with id "+ courseId + " is removed successfully");
+        System.out.println("Course with id " + courseId + " is removed successfully");
 
     }
 
     @Override
-    public CourseEntity getCourseByCourseCode(String courseCode) throws CourseNotFoundException, DatabaseInconsistentStateException {
+    public CourseEntity getCourseByCourseCode(String courseCode) throws CourseNotFoundException {
 
-        Query qry = entityManager.createNamedQuery("findByCourseCode");
+        System.out.println("Welcome to getCourseByCourseCode Method...");
+
+        Query qry = entityManager.createNamedQuery("CourseEntity.findByCourseCode");
         qry.setParameter("courseCode", courseCode);
+
         CourseEntity courseEntity = null;
         try {
+
             courseEntity = (CourseEntity) qry.getSingleResult();
+
+            System.out.println("Course Title : " + courseEntity.getCourseTitle());
+            System.out.println("Course Code : " + courseEntity.getCourseCode());
+            System.out.println("Credit Hours : " + courseEntity.getCourseCredithrs());
+
         } catch (NoResultException ne) {
             throw new CourseNotFoundException("Course with course code is not found : " + courseCode);
-        } catch (NonUniqueResultException nue) {
-            throw new DatabaseInconsistentStateException("Multiple records found with this course code : " + courseCode);
         }
-
         return courseEntity;
 
     }
@@ -114,9 +120,8 @@ public class CourseManager implements CourseManagerRemote {
     }
 
     @Override
-    public CourseEntity updateCourseTitle(int courseId, String newCourseTitle,String courseCode, int creditHours) throws CourseNotFoundException, WrongParameterException {
-        
-        
+    public CourseEntity updateCourseTitle(int courseId, String newCourseTitle, String courseCode, int creditHours) throws CourseNotFoundException, WrongParameterException {
+
         CourseEntity courseEntity = getCourseById(courseId);
         if (newCourseTitle == null || newCourseTitle.isEmpty()) {
             System.out.println("Course Title is not valid");
@@ -133,7 +138,7 @@ public class CourseManager implements CourseManagerRemote {
         } else {
             courseEntity.setCourseCredithrs(creditHours);
         }
-        
+
         entityManager.persist(courseEntity);
 
         return courseEntity;

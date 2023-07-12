@@ -21,35 +21,27 @@ import javax.persistence.Query;
 public class CourseRegisterManager implements CourseRegisterManagerRemote {
 
     @PersistenceContext(unitName = "ExamPU")
-
+            
     EntityManager entityManager;
-
+    
     @Override
-    public CourseRegistrationEntity registerSudentInCourse(StudentEntity stdID, CourseEntity courseID, String registrationYear) throws WrongParameterException {
-
+    public CourseRegistrationEntity registerStudentInCourse(StudentEntity stdID, CourseEntity courseID, String registrationYear) throws WrongParameterException {
         CourseRegistrationEntity registrationEntity = new CourseRegistrationEntity();
 
-        if (registrationYear == "null" || registrationYear.isEmpty()) {
-
+        if (registrationYear == null || registrationYear.isEmpty()) {
             throw new WrongParameterException("Registration Year can't be empty.");
-
         } else {
             registrationEntity.setCourseRegStudentID(stdID);
-
+            
             registrationEntity.setCourseRegCourseID(courseID);
-
+            
             registrationEntity.setCourseRegYear(registrationYear);
 
             entityManager.persist(registrationEntity);
+            
+            entityManager.flush();
 
-            if (registrationEntity != null) {
-
-                System.out.println("Course is assigned to this student.");
-
-            } else {
-
-                System.out.println("Course is not assigned to this student.");
-            }
+            System.out.println("Course is assigned to this student.");
         }
 
         return registrationEntity;
@@ -57,15 +49,11 @@ public class CourseRegisterManager implements CourseRegisterManagerRemote {
 
     @Override
     public List<CourseRegistrationEntity> getAllRegisteredCourse() throws StudentNotFoundException {
-
         Query qry = entityManager.createNamedQuery("CourseRegistrationEntity.findAll");
-
         List<CourseRegistrationEntity> allRegistered = qry.getResultList();
 
         if (allRegistered == null || allRegistered.isEmpty()) {
-
-            throw new StudentNotFoundException("No course is registered to any student found in database");
-
+            throw new StudentNotFoundException("No course is registered to any student found in the database");
         }
 
         return allRegistered;

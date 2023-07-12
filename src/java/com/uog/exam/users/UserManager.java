@@ -116,10 +116,16 @@ public class UserManager implements UserMangerRemote {
 
     @Override
     public UserEntity loginUser(String userName, String userPassword) throws WrongParameterException {
+         UserEntity userEntity = null;
         try {
-            UserEntity userEntity = findUserByUserName(userName);
-            if (userEntity.getUserName().equals(userName) && userEntity.getUserPassword().equals(userPassword)) {
+            userEntity = findUserByUserName(userName);
+            
+            String password = userEntity.getUserPassword();
+  
+            if (password.equals(userPassword)) {
+            
                 System.out.println("Login Successfully!");
+                
             } else {
                 System.out.println("Username or password is incorrect!");
                 throw new WrongParameterException("Username or password is incorrect!");
@@ -127,7 +133,7 @@ public class UserManager implements UserMangerRemote {
         } catch (UserNotFoundException ex) {
             Logger.getLogger(UserManager.class.getName()).log(Level.SEVERE, null, ex);
         }
-        return null;
+        return userEntity;
     }
 
 }

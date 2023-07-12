@@ -17,7 +17,7 @@ import javax.ejb.Remote;
 @Remote
 public interface CourseRegisterManagerRemote {
     
-    public CourseRegistrationEntity registerSudentInCourse( StudentEntity stdID, CourseEntity courseID, String registrationYear) throws WrongParameterException;
+    public CourseRegistrationEntity registerStudentInCourse( StudentEntity stdID, CourseEntity courseID, String registrationYear) throws WrongParameterException;
     
     public List<CourseRegistrationEntity> getAllRegisteredCourse() throws  StudentNotFoundException;
 

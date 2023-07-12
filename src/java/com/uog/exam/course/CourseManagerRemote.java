@@ -21,7 +21,7 @@ public interface CourseManagerRemote {
 
     public CourseEntity getCourseByTitle(String courseTitle) throws CourseNotFoundException, DatabaseInconsistentStateException;
     
-    public CourseEntity getCourseByCourseCode(String courseCode) throws CourseNotFoundException,DatabaseInconsistentStateException;
+    public CourseEntity getCourseByCourseCode(String courseCode) throws CourseNotFoundException;
     
     public void deleteCourseByCourseCode(String courseCode) throws CourseNotFoundException,DatabaseInconsistentStateException;
     

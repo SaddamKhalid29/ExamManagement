@@ -36,6 +36,9 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "RoomEntity.findByRoomCapacity", query = "SELECT r FROM RoomEntity r WHERE r.roomCapacity = :roomCapacity")})
 public class RoomEntity implements Serializable {
 
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "roomID")
+    private Collection<ExamEntity> examEntityCollection;
+
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -123,6 +126,15 @@ public class RoomEntity implements Serializable {
     @Override
     public String toString() {
         return "com.uog.exam.course.RoomEntity[ roomID=" + roomID + " ]";
+    }
+
+    @XmlTransient
+    public Collection<ExamEntity> getExamEntityCollection() {
+        return examEntityCollection;
+    }
+
+    public void setExamEntityCollection(Collection<ExamEntity> examEntityCollection) {
+        this.examEntityCollection = examEntityCollection;
     }
     
 }

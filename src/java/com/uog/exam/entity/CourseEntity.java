@@ -7,6 +7,7 @@ package com.uog.exam.entity;
 import java.io.Serializable;
 import java.util.Collection;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -35,6 +36,12 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "CourseEntity.findByCourseCode", query = "SELECT c FROM CourseEntity c WHERE c.courseCode = :courseCode"),
     @NamedQuery(name = "CourseEntity.findByCourseCredithrs", query = "SELECT c FROM CourseEntity c WHERE c.courseCredithrs = :courseCredithrs")})
 public class CourseEntity implements Serializable {
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "courseID")
+    private Collection<ExamEntity> examEntityCollection;
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "seatingPlanCourseID")
+    private Collection<SeatingPlanEntity> seatingPlanEntityCollection;
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -137,6 +144,24 @@ public class CourseEntity implements Serializable {
     @Override
     public String toString() {
         return "com.uog.exam.entity.CourseEntity[ courseID=" + courseID + " ]";
+    }
+
+    @XmlTransient
+    public Collection<SeatingPlanEntity> getSeatingPlanEntityCollection() {
+        return seatingPlanEntityCollection;
+    }
+
+    public void setSeatingPlanEntityCollection(Collection<SeatingPlanEntity> seatingPlanEntityCollection) {
+        this.seatingPlanEntityCollection = seatingPlanEntityCollection;
+    }
+
+    @XmlTransient
+    public Collection<ExamEntity> getExamEntityCollection() {
+        return examEntityCollection;
+    }
+
+    public void setExamEntityCollection(Collection<ExamEntity> examEntityCollection) {
+        this.examEntityCollection = examEntityCollection;
     }
     
 }
